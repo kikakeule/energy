@@ -1,0 +1,6 @@
+[submodule "energy-frontend"]
+	path = energy-frontend
+	url = https://github.com/kikakeule/energy-frontend
+[submodule "energy-backend"]
+	path = energy-backend
+	url = https://github.com/kikakeule/energy-backend
