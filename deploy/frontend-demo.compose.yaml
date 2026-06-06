@@ -1,0 +1,55 @@
+services:
+  build-frontend:
+    image: ${DEMO_BUILDER_IMAGE:-node:20-alpine}
+    restart: "no"
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN:?Set GITHUB_TOKEN to a fine-grained read-only GitHub token}
+      GIT_REF: ${GIT_REF:-master}
+      REPOSITORY_URL: ${REPOSITORY_URL:-https://github.com/kikakeule/energy.git}
+      CI: "true"
+    volumes:
+      - frontend_dist:/out
+      - npm_cache:/root/.npm
+    command: >
+      sh -lc '
+        set -eu;
+        if [ -z "$${GITHUB_TOKEN:-}" ]; then
+          echo "GITHUB_TOKEN is required";
+          exit 64;
+        fi;
+        apk add --no-cache git ca-certificates;
+        rm -rf /work /out-next;
+        mkdir -p /out-next;
+        AUTH_HEADER="$$(printf "x-access-token:%s" "$$GITHUB_TOKEN" | base64 | tr -d "\n")";
+        git -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic $$AUTH_HEADER" clone --recurse-submodules --branch "$$GIT_REF" "$$REPOSITORY_URL" /work;
+        unset GITHUB_TOKEN AUTH_HEADER;
+        cd /work/energy-frontend;
+        npm ci;
+        npm run build;
+        cp -a dist/. /out-next/;
+        rm -rf /out/*;
+        cp -a /out-next/. /out/;
+        rm -rf /work /out-next;
+        echo "Frontend demo build completed";
+      '
+
+  frontend:
+    image: ${DEMO_NGINX_IMAGE:-nginx:1.27-alpine}
+    depends_on:
+      build-frontend:
+        condition: service_completed_successfully
+    ports:
+      - "${FRONTEND_HTTP_PORT:-8080}:80"
+    volumes:
+      - frontend_dist:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  frontend_dist:
+  npm_cache:

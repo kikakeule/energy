@@ -25,6 +25,7 @@ Approved decision:
 - For the first clerk-level frontend demo, the mocked report should use the provided Harsefeld logo/branding.
 - The demo PDF must use the provided Harsefeld PNG logo or the configured logo asset; it must not use a hand-drawn or invented substitute logo.
 - Report layout must keep decorative boxes, status panels, and text from overlapping the logo.
+- Demo PDFs must not show placeholder implementation notes such as "Demo: Logo und Branding werden aus kuenftigen Admin-Personalisierungen gespeist."
 - Downloaded PDFs should be visually checked after layout changes so logo, heading, and summary boxes do not obscure each other.
 - The first demo may exclude admin/consultant-level template configuration UI unless it is necessary to properly define API-shaped interfaces.
 

@@ -91,4 +91,51 @@ docker compose build --pull=false frontend
 
 If `docker pull node:20-alpine` hangs or fails, fix Docker Desktop registry/proxy access or point `FRONTEND_NODE_IMAGE` and `FRONTEND_NGINX_IMAGE` at an internal mirror before retrying the Compose build.
 
+## One-Click Demo
+
+For compose, use `deploy/frontend-demo.compose.yaml` when manual checkout should be avoided. This compose file does not build a Docker image from the private source and does not mount the Docker socket. Instead:
+
+1. `build-frontend` starts from `node:20-alpine`.
+2. It uses a short-lived fine-grained GitHub token to clone `kikakeule/energy` and its private submodules.
+3. It unsets the token before `npm ci` and `npm run build`.
+4. It writes the built frontend assets into the `frontend_dist` named volume.
+5. `frontend` serves that volume with `nginx:1.27-alpine`.
+
+Minimal token scope:
+
+- Fine-grained personal access token.
+- Repository access only for `kikakeule/energy`, `kikakeule/energy-frontend`, and `kikakeule/energy-backend`.
+- Repository permission `Contents: Read-only`.
+- Short expiry, preferably one day or less for a demo install.
+
+Install options:
+
+- Include the compose file if the repository is already available:
+
+```yaml
+include:
+  - /mnt/tank/apps/harsefeld/energy/deploy/frontend-demo.compose.yaml
+```
+
+- Or paste the contents of `deploy/frontend-demo.compose.yaml` into a custom App YAML editor.
+
+Set these variables, or replace the placeholders in the pasted YAML:
+
+```env
+GITHUB_TOKEN=<fine-grained-read-only-token>
+GIT_REF=master
+FRONTEND_HTTP_PORT=8080
+```
+
+Optional base-image overrides for restricted networks:
+
+```env
+DEMO_BUILDER_IMAGE=registry.example.local/node:20-alpine
+DEMO_NGINX_IMAGE=registry.example.local/nginx:1.27-alpine
+```
+
+After the first successful install, revoke the GitHub token. The frontend can keep serving from the named volume. A reinstall or update that rebuilds from GitHub needs a fresh short-lived token.
+
+Do not use a bootstrap container with `/var/run/docker.sock` mounted for this demo path. That would let the container control the Docker host and would combine host-level Docker control with a private repository token.
+
 The backend submodule is present but does not yet contain a runnable backend service, so the current compose file intentionally starts the frontend demo only. Add the backend, database, and health checks once their implementation exists.

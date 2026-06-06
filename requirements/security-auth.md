@@ -31,6 +31,10 @@ Direct local login remains available for initial/demo use and for deployments wi
 - Separate public access from authenticated access.
 - Scope permissions by organization and potentially by site/building.
 - Control actions and administrative changes require audit logging.
+- V2 must support fine-grained clerk authorization for municipal users, scoped by village/site, object, actor, and action type where needed.
+- Fine-grained control authorization must distinguish reading values, direct actor commands, temporary overwrites, timetable/schedule editing, and administrative setup.
+- A user who can temporarily overwrite an actor must not automatically be allowed to edit recurring timetables unless explicitly granted.
+- A user who can read an object must not automatically be allowed to control it unless explicitly granted.
 
 ## API Credentials
 External API security is a required design topic.
@@ -54,6 +58,7 @@ Approved external integration scoping:
 - Data-ingestion/query permissions are scoped at the site level.
 - Protocol/integration-specific permissions are additionally scoped by protocol or connector type where relevant.
 - Datapoint/actor-level scoping remains a future option, but is not the default v1 model.
+- Datapoint/actor-level scoping for human clerk users is a v2 product requirement, separate from the v1 external integration scoping model.
 
 ## Security-Sensitive Features
 - Actor control.

@@ -7,7 +7,7 @@
 - Dates, numbers, currencies, and units must render according to locale.
 - Date fields that would normally default to today's date must use the user's browser date.
 - Date inputs must prevent selecting future dates.
-- Time horizon labels must use clear localized words, such as "1 Tag", "1 Woche", "1 Monat", "1 Jahr", "3 Jahre", and "10 Jahre" in German, and "1 day", "1 week", "1 month", "1 year", "3 years", and "10 years" in English.
+- Time horizon labels must use clear localized words, such as "1 Tag", "1 Woche", "1 Monat", "1 Jahr", "3 Jahre", and "5 Jahre" in German, and "1 day", "1 week", "1 month", "1 year", "3 years", and "5 years" in English.
 
 ## Product Surface
 The first project phase focuses on a customer-presentable frontend. It should communicate the intended product clearly while remaining compatible with the future v1 API.
@@ -70,11 +70,21 @@ Full product frontend should eventually include:
 - The graph component should support switching between cumulative and period-based views.
 - The German labels for this toggle are approved as "Kumuliert" and "Pro Monat" for the month-based demo view.
 - English labels must use clear wording, such as "Cumulative" and "Per month".
-- The graph component must support horizon controls for one day, one week, one month, one year, three years, and ten years.
-- The graph component must let users select individual days, weeks, months, or years depending on the current horizon/view.
+- The graph component must support horizon controls for one day, one week, one month, one year, three years, and five years.
+- The graph component must let users select individual days, weeks, months, quarters, or years depending on the current horizon/view.
+- The three-year and five-year graph views should show quarters, not one bar per year.
+- The three-year graph view shows 12 quarters; the five-year graph view shows 20 quarters.
+- Clicking a graph value should navigate to the next useful detail level, including month-to-day drilldown and quarter-to-containing-year drilldown.
 - The graph component must include a date field where users can enter a focus date.
 - The graph component should not include a redundant "Auswahl" dropdown.
-- Graph labels must include years in week, month, and year views.
+- The graph screen must include manual dropdown selection for village, object type, object, and measurement, in that order.
+- Village and object type default to "all"; the object dropdown is filtered by both and sorted alphabetically.
+- The object dropdown should include "Alle Objekte" for portfolio-level aggregate views.
+- The measurement dropdown offers only measurements available for the current object selection.
+- Hovering a graph field on desktop should show its value and unit.
+- On mobile/touch devices, tapping a graph value navigates instead of opening a hover tooltip; mobile-specific value preview behavior is a later UX TODO.
+- Month and day graph views should use compact spacing so daily or hourly values remain usable on smaller screens.
+- Graph labels must include years in week, month, quarter, and year views.
 - Graph table alternatives must include the same year context as the visible graph labels.
 - The same graph component should be reused for historic reading drilldowns and summary metric drilldowns.
 - Graphs must include table/text alternatives for accessibility.
@@ -84,7 +94,11 @@ Full product frontend should eventually include:
 - If a site/object has no open consultant review request, the primary action label should be "Anfrage senden" in German.
 - If a site/object already has an open consultant review request, the primary action label should change to "Anfrage aktualisieren" in German.
 - The screen should show a protocol/log above the request text field and action button.
-- The currently selected object should expand and show its measurements again, including Strom, Wasser, Waerme, and CO2 where present.
+- When a ratings object is selected, it should expand and show its measurements again, including Strom, Wasser, Waerme, and CO2 where present.
+- The ratings screen must not auto-select the first object when entered normally.
+- If the user arrives from an object-detail warning, the relevant object should expand automatically.
+- The expanded rating detail should include a small close button on the right side of the expanded fields.
+- The rating badge/icon and explanation text should use stable aligned columns so rows align even when status labels have different widths.
 - The protocol/log, request text field, and action button should appear directly below the expanded selected object and its measurements.
 - Closed requests remain in the log; once closed, a new request may be opened.
 - Rating rows and detail warnings should show an automatically generated status text first.
@@ -97,7 +111,30 @@ Full product frontend should eventually include:
 ## Control And Schedule Interaction
 - Pending actor command acknowledgement dialogs should automatically cancel when the selected object changes.
 - Pending schedule/timetable confirmation dialogs should automatically cancel when the selected object changes.
-- Users should be able to edit all schedule/timetable fields exposed in the demo: name, days, time window, target label, and enabled status.
+- Timetables should show a compact read-only view by default.
+- A row edit icon should open edit mode for a timetable row; saving returns to read-only view.
+- Edit mode should provide an X icon to cancel without saving.
+- Timetable edit forms should split "Zeitfenster" into start and end fields.
+- Timetable edit forms should include a controlled-actor dropdown with checkboxes.
+- Timetable actor selection may select multiple actors only when they have the same actor type; incompatible actor types are greyed out once an actor type is selected.
+- The "Ziel" field should be a dropdown populated from the selected actor's allowed actions, or the common allowed actions when multiple same-type actors are selected.
+
+## Navigation, Filters, And Sorting
+- On small screens where navigation moves to the top, the menu must include a minimize button.
+- The top menu should automatically minimize after changing to another page.
+- On regular desktop/tablet layouts, users should be able to hide or show menu text and keep an icon-only navigation rail for the current session.
+- Portfolio, ratings, and control views should share filters for village, object type, and rating.
+- Portfolio and ratings filters must include a "show critical objects even if not selected by filter" option that includes red objects only.
+- Control filters must include an option to hide objects without controllable actors.
+- Shared filters should persist while users navigate between portfolio, ratings, and control views.
+- Sorting options should include alphabetical, rating, type, village, and CO2 consumption.
+- Alphabetical, village, and CO2 sorting support ascending and descending order.
+- Type sorting groups objects by type label and sorts objects alphabetically inside each type.
+- Village sorting orders villages alphabetically and then orders objects alphabetically inside each village.
+- Rating sorting always places red first, then yellow, then green.
+- CO2 sorting places objects without CO2 values at the bottom in both directions.
+- Object selectors outside ratings should use cascaded dropdowns: village, object type, then object.
+- Cascaded village and object type dropdowns default to "all"; object options are filtered and sorted alphabetically.
 
 ## Design Requirements
 - Prioritize clarity and scanability for municipal users.

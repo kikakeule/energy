@@ -29,6 +29,12 @@ Permissions:
 - Mark readings as anomalous and request consultant review.
 - No direct datapoint creation or low-level system setup.
 
+Fine-grained clerk permissions are a v2 requirement:
+- Admins should be able to create clerk/community users whose access is limited to specific villages, sites, objects, actors, or action categories.
+- Example: a clerk may be allowed to read values for one gym and control only that gym.
+- Control permissions must distinguish at least direct actor commands, temporary overwrites, and timetable/schedule editing.
+- The UI should hide unavailable actions, but the backend must enforce the permission scope.
+
 ## Community Admin
 Community Admins are technically capable municipal users.
 
@@ -66,4 +72,5 @@ Permissions:
 - All privileged actions must be auditable.
 - Control actions must show actor, user, requested state, timestamp, result, and failure reason.
 - Role boundaries must be enforced in the backend, not only in the frontend.
+- Fine-grained v2 clerk permission checks must be enforced in the backend, including object scope and action type.
 - UI navigation must hide unavailable actions but backend authorization remains mandatory.

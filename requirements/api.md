@@ -16,6 +16,7 @@ Sources:
 ## Core API Areas
 - Authentication and session management.
 - User and role management.
+- Fine-grained clerk permission assignments for later versions.
 - Organization/community branding settings, including configured logo metadata and logo asset retrieval.
 - Organization, municipality, site, building, and asset hierarchy.
 - Datapoint configuration and metadata.
@@ -35,11 +36,15 @@ The reading API must support:
 - Querying current readings.
 - Querying historic readings by time range.
 - Querying time-series data for graph drilldowns by focus date, horizon, aggregation level, cumulative/period mode, site/object, datapoint, medium, and category.
+- Querying portfolio aggregate time-series data for filtered object sets, including an "all objects" selection where appropriate.
 - Filtering by organization, site, building, datapoint, medium, and category.
+- Filtering object/time-series queries by village and object type.
 - Storing source, timestamp, unit, value, quality status, and import method.
 - Handling billing-period readings and calendar-period normalized readings.
-- Returning enough metadata for the frontend to select specific days, weeks, months, or years depending on the chosen horizon.
-- Returning display labels or label metadata with enough year context for week, month, and year views.
+- Returning enough metadata for the frontend to select specific days, weeks, months, quarters, or years depending on the chosen horizon.
+- Returning display labels or label metadata with enough year context for week, month, quarter, and year views.
+- Supporting the approved horizons of one day, one week, one month, one year, three years, and five years; three-year and five-year responses must support quarter-level buckets.
+- Returning values, units, bucket timestamps, bucket labels, and drilldown targets so the frontend can show hover values and navigate from a clicked bucket to the next useful detail view.
 - Rejecting or normalizing future focus dates according to product policy; frontend date inputs should not send future dates, but the backend must not rely only on UI validation.
 
 ## Branding API
@@ -65,6 +70,7 @@ The anomaly/review API must support:
 ## Actor Control API
 The actor API must support:
 - Reading actor state.
+- Returning actor type/kind, allowed actions, and enough label metadata for timetable target dropdowns.
 - Sending control commands.
 - Supporting non-binary controls such as target temperature, mode, level, and shade position.
 - Returning command status and failure reason.
@@ -76,9 +82,27 @@ The automation API must support:
 - Time schedules.
 - Simple condition-based rules.
 - Manual enable/disable.
-- Editing schedule/timetable fields, including name, days, time window, target label, and enabled status.
+- Editing schedule/timetable fields, including name, days, start time, end time, selected actor IDs, target action, and enabled status.
+- Validating that a timetable containing multiple actors only combines actors of the same actor type.
+- Validating that the selected target action is included in the allowed-actions intersection for all selected actors.
 - Execution history.
 - Conflict detection and safe failure behavior.
+
+## Object List And Filter API
+Portfolio, ratings, control, and object-selection endpoints must support:
+- Filtering by village, object type, and rating.
+- Returning red/critical objects for portfolio and ratings views when the critical-object exception is enabled, even when other filters would exclude them.
+- Filtering control lists to hide objects without controllable actors.
+- Sorting by alphabetical name, rating, object type, village, and CO2 consumption.
+- Ascending and descending sort directions for alphabetical, village, and CO2 sorting.
+- Type sorting groups objects by type label and sorts objects alphabetically inside each type.
+- Rating sort order of red, yellow, green, then unrated/grey unless a future requirement changes the unrated placement.
+- Placing objects without CO2 values at the bottom for CO2 sorting in both directions.
+- Returning distinct villages, object types, objects, and available measurements needed for cascaded object selectors.
+- Returning aggregate measurement availability for "all objects" portfolio selections.
+
+## User And Permission API
+The user/role API must be designed to later support fine-grained clerk permission assignments, including read access, actor command access, timetable edit access, and temporary overwrite access by organization, village/site, object, actor, or action scope.
 
 ## Reporting API
 The reporting API must support:

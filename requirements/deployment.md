@@ -52,6 +52,8 @@ Default preference:
 - Avoid requiring users to manually run build commands before `docker compose up`.
 - For private repositories, authorize Git access on the host and initialize submodules before running Compose.
 - Do not pass GitHub credentials into the default Docker build. The normal local/demo Compose path should consume already checked-out submodule directories.
+- For appliance-style deployments where manual checkout is undesirable, an alternate Compose file may use a short-lived read-only GitHub token in a builder service to clone private source, build static frontend assets into a named volume, and serve them through nginx.
+- Such builder-service deployments must not mount the Docker socket or otherwise grant the builder service control over the host Docker daemon.
 
 ## Deployment Files
 The main repository should eventually contain:
@@ -81,6 +83,16 @@ Approved initial direction:
 - Public base images such as Node and nginx may still be pulled during the Docker build unless a deployment overrides them with internally mirrored images.
 - Environments without Docker Hub or public registry access must provide base images through an internal mirror or preloaded images, while still building application images locally from source.
 - Keep a self-hosted private Docker Registry as the quick replacement/fallback if GHCR quota, pricing, or policy becomes a problem.
+
+## Appliance Deployment
+Approved demo direction:
+- Provide an alternate compose file for one-click frontend-demo installs where manual Git checkout is not desired.
+- The alternate file may use a builder container based on Node to clone private source with a short-lived fine-grained GitHub token.
+- The token must be read-only and scoped only to the required repositories.
+- The builder must unset the token before running package installation or frontend build scripts.
+- The builder writes compiled static assets to a named volume; nginx serves those assets.
+- The builder must not mount `/var/run/docker.sock`, run Docker-in-Docker, or load images into the host daemon.
+- Users should revoke the token after a successful demo install and provide a fresh token for rebuild/update.
 
 ## Open Questions
 - What image publication strategy should production-like deployment use when source builds are too slow or unavailable?

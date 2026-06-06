@@ -37,7 +37,17 @@
   - Decision: German demo labels for the month view toggle are "Kumuliert" and "Pro Monat"; English labels should use clear words.
   - Decision: Horizon labels should use clear words in German and English instead of compact abbreviations.
   - Decision: Remove the redundant graph "Auswahl" dropdown.
-  - Decision: Week, month, and year graph labels and table rows include the year.
+  - Decision: Week, month, quarter, and year graph labels and table rows include the year.
+- Resolved: First-demo graph drilldown and horizon refinements.
+  - Decision: Replace the earlier ten-year graph horizon with a five-year horizon in the demo and requirements.
+  - Decision: Three-year and five-year graph views show quarters; three years shows 12 quarters and five years shows 20 quarters.
+  - Decision: Clicking a quarter drills into the year view containing that quarter.
+  - Decision: Clicking a graph value drills into the next useful detail view where available.
+  - Decision: The "Verlauf" screen includes village, object type, object, and measurement dropdowns in that order.
+  - Decision: Village and object type default to all; object options are filtered and sorted alphabetically.
+  - Decision: "Alle Objekte" is allowed for portfolio-level graphs, with aggregate media offered where available.
+  - Decision: Measurement dropdowns show only available measurements for the current selection.
+  - Decision: Desktop graph hover shows value and unit; mobile tapping navigates, with mobile-specific value preview left as a later UX TODO.
 - Resolved: Demo date behavior.
   - Decision: Demo fields that normally use today's date should use the user's browser date.
   - Decision: Date inputs must not allow future dates.
@@ -49,16 +59,43 @@
   - Decision: The review request model includes consultant response fields: short assessment and full assessment.
   - Decision: Rating rows first show automatically generated status text, then request status or consultant short assessment as separate subtext when a request exists.
   - Decision: Clicking consultant/request subtext reveals the full answer when available.
-  - Decision: On the rating screen, the selected object expands to show Strom, Wasser, Waerme, and CO2 measurements again.
+  - Decision: On the rating screen, a selected object expands to show Strom, Wasser, Waerme, and CO2 measurements again.
+  - Decision: Entering the rating screen normally does not auto-select the first object.
+  - Decision: Navigating from object detail warning expands the relevant object.
+  - Decision: Expanded rating details include a right-side close button that hides the expanded detail without clearing the globally selected object.
   - Decision: The request log, text field, and action button appear directly below the selected object and measurements.
   - Decision: Object detail shows a dismissible top warning for non-green objects; clicking it navigates to the rating screen with the relevant request context.
 - Resolved: First-demo schedule editing.
-  - Decision: Demo users can edit all exposed timetable fields: name, days, time window, target label, and enabled status.
+  - Decision: Demo users can edit all exposed timetable fields: name, days, start time, end time, selected actor(s), target action, and enabled status.
   - Decision: The schedule/timetable API shape should be prepared for backend replacement.
+- Resolved: First-demo timetable editing refinements.
+  - Decision: Timetables show the old compact/read-only view by default.
+  - Decision: A row edit icon opens edit mode, and saving returns to read-only mode.
+  - Decision: Edit mode has an X icon to cancel without saving.
+  - Decision: "Zeitfenster" is split into start and end fields in edit mode.
+  - Decision: Timetable actor selection uses a checkbox dropdown and can include multiple actors of the same actor type.
+  - Decision: Once an actor type is selected, actors of other types are greyed out.
+  - Decision: The "Ziel" dropdown is populated from allowedActions and only shows actions available on all selected actors.
 - Resolved: First-demo control confirmation behavior.
   - Decision: Pending actor command and schedule/timetable confirmation windows automatically cancel when another object is selected.
 - Resolved: First-demo button contrast.
   - Decision: Dark green primary buttons must use globally defined high-contrast white or off-white text, including report buttons and rating request buttons.
+- Resolved: First-demo filtering, sorting, and navigation behavior.
+  - Decision: Portfolio, ratings, and control views share persistent filters.
+  - Decision: Required filters are village, object type, and rating.
+  - Decision: Portfolio and ratings include a toggle to show red/critical objects even when filters would hide them; this exception applies only to red objects.
+  - Decision: Control includes a filter to hide objects without controllable actors.
+  - Decision: Sorting includes alphabetical, rating, type, village, and CO2 consumption.
+  - Decision: Alphabetical, village, and CO2 sorting support ascending and descending order.
+  - Decision: Type sorting groups objects by type and sorts objects alphabetically inside each type.
+  - Decision: Village sorting sorts villages alphabetically and objects alphabetically inside each village.
+  - Decision: Rating sorting always orders red, yellow, green.
+  - Decision: CO2 sorting places objects without CO2 data at the bottom in both directions.
+  - Decision: Object selectors outside ratings use cascaded village, type, and object dropdowns.
+  - Decision: On small screens the top menu can be minimized and auto-minimizes after page changes.
+  - Decision: On regular layouts users can hide/unhide menu text for the current session.
+  - Decision: Sidebar text-collapse state is current-session only.
+  - Decision: Mobile graph value preview is requirements-only for now; no code TODO is required.
 
 ## Reporting
 - Resolved: First report template target.
@@ -80,6 +117,7 @@
   - Decision: Reports should include configured community logo/branding where available.
   - Decision: The first demo report should use the provided Harsefeld PNG logo/branding.
   - Decision: The demo PDF must not draw decorative boxes over the logo; generated report PDFs should be visually checked after layout changes.
+  - Decision: The demo PDF must not show placeholder implementation notes about future Admin personalization.
 
 ## Ratings
 - Resolved: Rating thresholds.
@@ -124,6 +162,11 @@
 - Resolved: Privileged user 2FA.
   - Decision: All privileged users must use 2FA.
   - Decision: Email-based one-time codes are allowed as a supported 2FA method, alongside authenticator app/TOTP.
+- Resolved: V2 fine-grained clerk authorization direction.
+  - Decision: Admins should be able to create clerk/community users with fine-grained permissions.
+  - Decision: Permissions may be scoped to villages, sites, objects, actors, and action categories.
+  - Decision: Control permissions distinguish reading values, direct actor control, temporary overwrites, and recurring timetable editing.
+  - Decision: This is a v2 requirement and is not part of the first clerk-level frontend demo.
 
 ## Architecture
 - Resolved: Edge connector timing.
@@ -154,6 +197,12 @@
   - Decision: Environments without public registry access must provide base images through an internal mirror or preloaded images, while application images are still built locally from source.
   - Decision: Keep self-hosted private Docker Registry as the quick replacement/fallback if GHCR quota, pricing, or policy becomes a problem.
   - Open detail: Production-like deployments still need a final image publication strategy when source builds are too slow or unavailable.
+- Resolved: one-click demo deployment.
+  - Decision: Provide an alternate appliance Compose file for the frontend demo when manual checkout is undesirable.
+  - Decision: The alternate file may use a short-lived fine-grained GitHub token with read-only contents access to the required private repositories.
+  - Decision: The builder service clones source, unsets the token before package installation/build scripts, writes compiled frontend assets to a named volume, and nginx serves that volume.
+  - Decision: The builder service must not mount `/var/run/docker.sock`, run Docker-in-Docker, or load images into the host daemon.
+  - Decision: Users should revoke the token after a successful install and provide a fresh short-lived token for rebuild/update.
 
 ## Data Model
 - Resolved: Required v1 media/data categories.

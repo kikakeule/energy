@@ -10,13 +10,22 @@
 - Clicking a metric card or historic row should navigate to the graph screen with the clicked object, medium, date/period, horizon, and mode preselected.
 - The graph screen must include a back button that returns to the previously active view.
 - Time-series graphs must support cumulative and period-based views where meaningful.
-- Time-series graphs must support clear time horizon labels for one day, one week, one month, one year, three years, and ten years.
-- Time-series graphs must allow selecting specific days, weeks, months, or years based on the current horizon/view.
+- Time-series graphs must support clear time horizon labels for one day, one week, one month, one year, three years, and five years.
+- Time-series graphs must allow selecting specific days, weeks, months, quarters, or years based on the current horizon/view.
+- The three-year graph view must show 12 quarters instead of three single annual bars.
+- The five-year graph view must show 20 quarters and replaces the earlier ten-year view.
+- Clicking a graph value should drill down to the next useful view: a month goes to the selected month view, a day/week value goes to the relevant smaller time view where available, and a quarter in the three-year or five-year view goes to the year view containing that quarter.
 - Time-series graphs must include a focus date field where users can enter a specific date.
 - Date fields that represent "today" or the current working date should default to the user's browser date.
 - Users must not be able to select future dates in date fields.
-- Graph labels and table alternatives must include the year for week, month, and year views so period context is unambiguous.
+- Graph labels and table alternatives must include the year for week, month, quarter, and year views so period context is unambiguous.
 - The graph must not include a separate "Auswahl" dropdown if the same selection is already represented by click navigation, horizon controls, and focus date.
+- The graph screen must also allow manual selection through four dropdowns in this order: village, object type, object, and measurement.
+- Village and object type default to "all".
+- The object dropdown lists only objects matching the selected village and type, sorted alphabetically.
+- The object dropdown should include "Alle Objekte" for portfolio-level aggregate graphs.
+- When "Alle Objekte" is selected, the measurement dropdown should offer aggregate media such as electricity, water, heat, and CO2 where those media exist in the filtered object set.
+- When a single object is selected, the measurement dropdown should offer only measurements available for that object.
 - Support electricity, heat, water, CO2 equivalents, costs, and energy production.
 - Compare readings against:
   - last year;
@@ -67,6 +76,7 @@ Approved decision:
 - Historic readings should offer a toggle between "Kumuliert" and "Pro Monat" in German, and clear equivalent English labels.
 - Summary fields for electricity, heat, water, and CO2 should be clickable and open the same graph component with a last-12-month default focus.
 - Graph horizon controls should use clear German and English labels, not abbreviations.
+- The first demo should offer one day, one week, one month, one year, three years, and five years as graph horizons; ten years is out of scope for the demo.
 - The ratings/anomaly screen should show immediate text feedback after a review request is sent or updated.
 - The ratings/anomaly screen should show a protocol/log of requested consultant reviews and updates below the request form.
 - If a site/object already has an open consultant review request, the primary button should change from "Anfrage senden" to "Anfrage aktualisieren".
@@ -112,12 +122,33 @@ Approved decision:
   - an automatically generated assessment such as "Alle Werte sind vollständig und liegen im grünen Bereich", "Strom deutlich erhöht", "Strom und Wasserverbrauch leicht erhöht", or "Wasserverbrauch für Mai und Juni unvollständig";
   - a request/consultant subtext shown only after a request exists, such as request status while pending or the consultant's short assessment after response.
 - Clicking a request/consultant subtext should reveal the full consultant answer where one exists.
-- The ratings screen should expand the currently selected object and show its measurements for electricity, water, heat, and CO2 again.
+- When a ratings object is selected, the ratings screen should expand it and show its measurements for electricity, water, heat, and CO2 again.
+- Entering the ratings screen normally must not automatically select or expand the first object.
+- Navigating from an object-detail warning to the ratings screen should expand the relevant object and show its request context.
+- The expanded ratings object must include a small close button on the right of the expanded fields; closing hides the expanded detail without clearing the globally selected object.
 - On the ratings screen, the request log, text field, and action button should appear directly below the currently selected object and its measurements, not at the page bottom.
 - On object detail, non-green objects should show a dismissible warning at the top.
 - The object detail warning should show the automatic warning text, a request-in-progress status, or the consultant's short assessment depending on request state.
 - Clicking the object detail warning should navigate to the ratings screen with the relevant object selected and ready to send a request or review the consultant answer.
 - Later versions may route anomalies to AI analysis.
+
+## Filtering, Sorting, And Object Selection
+- Portfolio, ratings, and control views must provide shared filters because communities may manage many objects such as traffic lights, street lights, buildings, and technical sites.
+- Required shared filters are village, object type, and rating.
+- Portfolio and ratings views must include an exception toggle that shows red/critical objects even when they do not match the current village or type filters.
+- The critical-object exception applies only to red ratings, not yellow or unrated objects.
+- The control view must include a filter to hide objects without controllable actors.
+- Shared filters should persist across navigation between portfolio, ratings, and control views.
+- Sorting must include alphabetical, rating, type, village, and CO2 consumption.
+- Alphabetical, village, and CO2 sorting must support ascending and descending order.
+- Type sorting groups objects by type label and sorts objects alphabetically inside each type.
+- Village sorting sorts villages alphabetically and then sorts objects alphabetically within each village.
+- Rating sorting always orders red first, then yellow, then green, with unrated/grey entries after rated entries unless a later requirement changes this.
+- CO2 sorting places objects without CO2 data at the bottom in both ascending and descending order.
+- Object selection controls outside the ratings view should use a cascaded selection order: village, object type, object.
+- Cascaded village and object-type dropdowns default to "all".
+- Cascaded object dropdowns list only matching objects and sort them alphabetically.
+- The ratings view uses filters instead of a single-object dropdown.
 
 ## Branding And Personalization
 - Admin users must be able to configure community personalization options.
@@ -135,7 +166,14 @@ Approved decision:
   - schools need reduced heating on weekends;
   - gyms may have low or no usage in mornings;
   - offices and libraries may follow opening hours.
-- Users should be able to edit all schedule/timetable fields exposed in the demo: name, days, time window, target label, and enabled status.
+- Timetables should show a compact read-only row by default.
+- A row edit icon opens timetable edit mode for that row; edit mode remains active until the user saves or cancels.
+- Timetable edit mode must include an X icon to cancel editing and restore the previous read-only row.
+- Users should be able to edit all schedule/timetable fields exposed in the demo: name, days, start time, end time, controlled actor selection, target action, and enabled status.
+- Timetable actor selection must support selecting multiple actors of the same actor type through a dropdown with checkboxes.
+- Once an actor type is selected for a timetable, actors of other types should be greyed out because mixed actor types should not be combined in one timetable.
+- The timetable target field ("Ziel") must be a dropdown populated from the selected actor's allowed actions.
+- For timetables with multiple selected actors, the target dropdown must show only actions available on all selected actors.
 - Schedule/timetable editing must use API-shaped interfaces that can map to the future backend.
 - Allow simple sensor-based automations:
   - heating based on temperature sensors;
