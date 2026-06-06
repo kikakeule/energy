@@ -2,6 +2,7 @@
 url = "https://api.githubcopilot.com/mcp/"
 bearer_token_env_var = "GITHUB_PAT_TOKEN"
 default_tools_approval_mode = "prompt"
+enabled = false
 
 [mcp_servers.playwright]
 command = "cmd"
