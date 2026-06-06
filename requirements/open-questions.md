@@ -22,6 +22,43 @@
   - Decision: Admin and Energy Consultant screens are moved out of the first-demo screen list because they are explicitly out of scope.
 - Resolved: Demo data identity.
   - Decision: Use Samtgemeinde Harsefeld-style mock data, fictionalized for 2026 so it does not imply real current values.
+- Resolved: First-demo branding.
+  - Decision: The full product Admin UI must support community personalization, including at least a configurable community logo.
+  - Decision: The first Community/Clerk-only demo should show the provided Harsefeld PNG logo as a fixed demo asset.
+  - Decision: The frontend should place the provided logo in a normal public/static asset location and remove unused generated logo assets.
+  - Decision: The demo must not use an invented or hand-drawn replacement logo.
+  - Decision: Admin branding configuration UI remains out of scope for the first demo.
+- Resolved: First-demo graph drilldowns.
+  - Decision: Historic month rows open a graph focused on daily usage for the selected month.
+  - Decision: Summary metric cards such as electricity, heat, water, and CO2 open the same graph component focused on the last 12 months.
+  - Decision: The graph is a separate authenticated tab named "Verlauf" in German.
+  - Decision: Clicking a metric or historic row navigates to "Verlauf" with the clicked field preselected and a back button returning to the previous view.
+  - Decision: The graph supports cumulative and period-based views.
+  - Decision: German demo labels for the month view toggle are "Kumuliert" and "Pro Monat"; English labels should use clear words.
+  - Decision: Horizon labels should use clear words in German and English instead of compact abbreviations.
+  - Decision: Remove the redundant graph "Auswahl" dropdown.
+  - Decision: Week, month, and year graph labels and table rows include the year.
+- Resolved: Demo date behavior.
+  - Decision: Demo fields that normally use today's date should use the user's browser date.
+  - Decision: Date inputs must not allow future dates.
+- Resolved: First-demo consultant review request feedback.
+  - Decision: Rating/anomaly request actions must show immediate text feedback.
+  - Decision: A site/object can have one open consultant review request until the Energy Consultant closes it.
+  - Decision: While the request is open, Community/Clerk updates are appended to the same request and the action label changes to "Anfrage aktualisieren".
+  - Decision: Closed requests stay visible in the protocol/log; after closure, a new request may be opened.
+  - Decision: The review request model includes consultant response fields: short assessment and full assessment.
+  - Decision: Rating rows first show automatically generated status text, then request status or consultant short assessment as separate subtext when a request exists.
+  - Decision: Clicking consultant/request subtext reveals the full answer when available.
+  - Decision: On the rating screen, the selected object expands to show Strom, Wasser, Waerme, and CO2 measurements again.
+  - Decision: The request log, text field, and action button appear directly below the selected object and measurements.
+  - Decision: Object detail shows a dismissible top warning for non-green objects; clicking it navigates to the rating screen with the relevant request context.
+- Resolved: First-demo schedule editing.
+  - Decision: Demo users can edit all exposed timetable fields: name, days, time window, target label, and enabled status.
+  - Decision: The schedule/timetable API shape should be prepared for backend replacement.
+- Resolved: First-demo control confirmation behavior.
+  - Decision: Pending actor command and schedule/timetable confirmation windows automatically cancel when another object is selected.
+- Resolved: First-demo button contrast.
+  - Decision: Dark green primary buttons must use globally defined high-contrast white or off-white text, including report buttons and rating request buttons.
 
 ## Reporting
 - Resolved: First report template target.
@@ -39,6 +76,10 @@
   - Decision: Public reports hide site-level details by default.
   - Decision: Guest/Public users receive aggregated or summarized report data unless a report section or data item is explicitly marked public.
   - Decision: Publication workflow needs visibility controls with "hide detail from public" as the safe default.
+- Resolved: Report branding.
+  - Decision: Reports should include configured community logo/branding where available.
+  - Decision: The first demo report should use the provided Harsefeld PNG logo/branding.
+  - Decision: The demo PDF must not draw decorative boxes over the logo; generated report PDFs should be visually checked after layout changes.
 
 ## Ratings
 - Resolved: Rating thresholds.
@@ -101,12 +142,18 @@
   - Decision: The default Docker Compose setup should support both local demo and production-like deployment through Compose profiles or separate compose overlays.
   - Decision: The local demo path should be easy to start, while the production-like path should remain available from the main `energy` repository.
 - Resolved: Initial private container registry.
+  - Decision: The local/demo path builds application images from local checked-out submodules through Docker Compose and does not require pulling a prebuilt application image from Docker Hub, GHCR, or another registry.
+  - Decision: Private GitHub access is handled on the host before Compose runs by authorizing Git and initializing the private submodules.
+  - Decision: The default Docker build should not receive GitHub credentials because it consumes already checked-out source directories.
   - Decision: Prefer building from source through Docker Compose for the demo and avoid GHCR unless it is necessary.
   - Decision: GHCR is available as an optional private image registry when prebuilt images are necessary.
   - Decision: Add cleanup/retention from the beginning and keep only useful tags such as `latest`, `demo`, and the last few version tags.
   - Decision: Delete untagged images and avoid permanently publishing every branch build.
   - Decision: Normal local/demo deployment must build from frontend/backend submodules where possible so registry pulls are optional.
+  - Decision: Public base images such as Node and nginx may still be pulled unless deployments override them with internal mirrored images.
+  - Decision: Environments without public registry access must provide base images through an internal mirror or preloaded images, while application images are still built locally from source.
   - Decision: Keep self-hosted private Docker Registry as the quick replacement/fallback if GHCR quota, pricing, or policy becomes a problem.
+  - Open detail: Production-like deployments still need a final image publication strategy when source builds are too slow or unavailable.
 
 ## Data Model
 - Resolved: Required v1 media/data categories.

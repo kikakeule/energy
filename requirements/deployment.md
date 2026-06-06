@@ -29,6 +29,7 @@ Required behavior:
 - No manual backend precompile step.
 - No local Node.js, package-manager, or backend runtime installation required outside Docker for normal deployment.
 - Compose should build required images from source or pull prebuilt images.
+- The local demo must build application images from local checked-out source/submodules rather than requiring a pushed application image from Docker Hub, GHCR, or another registry.
 - Initial setup should be possible with a small number of commands after cloning the main repository.
 - Environment variables should be documented and have safe examples.
 - Persistent data must use named volumes or documented bind mounts.
@@ -49,6 +50,8 @@ Default preference:
 - Consume `energy-frontend` and `energy-backend` from the main `energy` repository via Git submodules.
 - Keep deployment orchestration in the main `energy` repository.
 - Avoid requiring users to manually run build commands before `docker compose up`.
+- For private repositories, authorize Git access on the host and initialize submodules before running Compose.
+- Do not pass GitHub credentials into the default Docker build. The normal local/demo Compose path should consume already checked-out submodule directories.
 
 ## Deployment Files
 The main repository should eventually contain:
@@ -64,6 +67,8 @@ Reference:
 
 ## Container Registry
 Approved initial direction:
+- The local/demo path builds application images from source through Docker Compose and tags them locally, for example `energy-frontend-demo:local`.
+- The local/demo path must not require pulling a prebuilt application image from Docker Hub, GHCR, or any other image registry.
 - GHCR private images are the initial optional private registry choice when prebuilt images are necessary.
 - Prefer building from source through Docker Compose for the demo and avoid GHCR unless it is necessary.
 - GHCR is available as an optional private image registry when prebuilt images are necessary.
@@ -73,8 +78,10 @@ Approved initial direction:
 - Delete untagged images.
 - Avoid permanently publishing every branch build.
 - Normal local/demo deployment must build from the frontend/backend submodules where possible so registry pulls are optional.
+- Public base images such as Node and nginx may still be pulled during the Docker build unless a deployment overrides them with internally mirrored images.
+- Environments without Docker Hub or public registry access must provide base images through an internal mirror or preloaded images, while still building application images locally from source.
 - Keep a self-hosted private Docker Registry as the quick replacement/fallback if GHCR quota, pricing, or policy becomes a problem.
 
 ## Open Questions
-- Should deployment build images from source or pull published images by default?
+- What image publication strategy should production-like deployment use when source builds are too slow or unavailable?
 - What default domain, TLS, and reverse proxy strategy should be used for production?

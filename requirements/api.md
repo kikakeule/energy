@@ -16,11 +16,13 @@ Sources:
 ## Core API Areas
 - Authentication and session management.
 - User and role management.
+- Organization/community branding settings, including configured logo metadata and logo asset retrieval.
 - Organization, municipality, site, building, and asset hierarchy.
 - Datapoint configuration and metadata.
 - Reading ingestion and reading queries.
 - Historical import workflows.
 - Ratings, thresholds, estimates, and anomalies.
+- Consultant review request creation, update, closure state, and protocol/log queries.
 - Actor discovery, configuration, control, and command history.
 - Automation and schedule management.
 - Report generation, consultant edits, release workflow, and downloads.
@@ -32,9 +34,33 @@ The reading API must support:
 - Checking readings via API.
 - Querying current readings.
 - Querying historic readings by time range.
+- Querying time-series data for graph drilldowns by focus date, horizon, aggregation level, cumulative/period mode, site/object, datapoint, medium, and category.
 - Filtering by organization, site, building, datapoint, medium, and category.
 - Storing source, timestamp, unit, value, quality status, and import method.
 - Handling billing-period readings and calendar-period normalized readings.
+- Returning enough metadata for the frontend to select specific days, weeks, months, or years depending on the chosen horizon.
+- Returning display labels or label metadata with enough year context for week, month, and year views.
+- Rejecting or normalizing future focus dates according to product policy; frontend date inputs should not send future dates, but the backend must not rely only on UI validation.
+
+## Branding API
+The branding API must support:
+- Reading organization/community branding settings.
+- Storing and retrieving a community logo or logo reference.
+- Returning logo metadata such as media type, dimensions where known, alt text, and last update timestamp.
+- Making the configured logo available to authenticated UI, public UI, and report generation.
+- Enforcing Admin-only mutation permissions for branding settings.
+
+## Anomaly And Consultant Review API
+The anomaly/review API must support:
+- Creating a consultant review request for an anomalous reading, site, object, or metric.
+- Returning immediate status for request creation or update.
+- Enforcing at most one open consultant review request per site/object or equivalent review scope until the Energy Consultant closes it.
+- Adding updates to an existing open request instead of creating parallel duplicate requests.
+- Keeping closed requests and all updates in a protocol/log.
+- Querying request logs with timestamp, actor/user, site/object, message, status, and entry type such as request opened, request updated, or request closed.
+- Returning consultant response fields when present, including a short assessment for overview/status surfaces and a full assessment for detail views.
+- Returning enough state for the frontend to distinguish no request, request in progress, and consultant answered/closed states.
+- Allowing Energy Consultants to close a request in later consultant workflows.
 
 ## Actor Control API
 The actor API must support:
@@ -50,6 +76,7 @@ The automation API must support:
 - Time schedules.
 - Simple condition-based rules.
 - Manual enable/disable.
+- Editing schedule/timetable fields, including name, days, time window, target label, and enabled status.
 - Execution history.
 - Conflict detection and safe failure behavior.
 

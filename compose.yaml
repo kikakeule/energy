@@ -1,7 +1,13 @@
 services:
   frontend:
+    image: energy-frontend-demo:local
+    pull_policy: build
     build:
       context: ./energy-frontend
+      dockerfile: Dockerfile
+      args:
+        NODE_IMAGE: ${FRONTEND_NODE_IMAGE:-node:20-alpine}
+        NGINX_IMAGE: ${FRONTEND_NGINX_IMAGE:-nginx:1.27-alpine}
     ports:
       - "${FRONTEND_HTTP_PORT:-8080}:80"
     healthcheck:

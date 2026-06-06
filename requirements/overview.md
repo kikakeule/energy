@@ -21,6 +21,7 @@ The project must be usable from scratch through Docker Compose from the main rep
 - Control energy-affecting actors such as heating, cooling, lighting, shades, and blinds.
 - Configure simple automations and time schedules.
 - Generate annual energy reports similar to the Harsefeld 2023 report.
+- Support community branding such as a community logo in the UI and reports.
 - Allow community users to request consultant review for anomalous readings.
 - Allow energy consultants to add findings, set estimates, and release reports.
 - Provide a public/guest overview and public report downloads without login.

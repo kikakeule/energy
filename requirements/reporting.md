@@ -22,11 +22,16 @@ Approved decision:
 - Future product direction is configurable report templates.
 - The report system must not be limited to a single hardcoded Harsefeld or Niedersachsen template.
 - For the first clerk-level frontend demo, provide a mocked downloadable report positioned as an imaginary Harsefeld 2026 energy report.
+- For the first clerk-level frontend demo, the mocked report should use the provided Harsefeld logo/branding.
+- The demo PDF must use the provided Harsefeld PNG logo or the configured logo asset; it must not use a hand-drawn or invented substitute logo.
+- Report layout must keep decorative boxes, status panels, and text from overlapping the logo.
+- Downloaded PDFs should be visually checked after layout changes so logo, heading, and summary boxes do not obscure each other.
 - The first demo may exclude admin/consultant-level template configuration UI unless it is necessary to properly define API-shaped interfaces.
 
 ## Report Contents
 The Harsefeld report indicates these content areas should be supported:
 - Title, municipality, reporting period, generation date.
+- Community logo or configured report branding where available.
 - Introduction and reporting context.
 - List of investigated properties and sites.
 - Building category and address.

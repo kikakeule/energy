@@ -14,6 +14,7 @@ Permissions:
 - Add users, delete users, and change roles.
 - Manage authentication and integration settings.
 - Manage API clients, API tokens, or other machine credentials.
+- Manage community personalization settings, including the community logo.
 
 ## Community
 Community users are clerks or public officials and may not be technically experienced. Their interface must be clean and limited to common workflows.

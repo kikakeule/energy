@@ -93,6 +93,10 @@ The deployment must avoid requiring local build tools outside Docker for normal 
 
 ## Container Registry Direction
 - Build from source through Docker Compose for local/demo deployments wherever possible.
+- For private repositories, authorize Git on the host and initialize submodules before Compose runs.
+- The default local/demo Docker build consumes local submodule source and should not receive GitHub credentials.
+- The demo does not require pulling a prebuilt application image from Docker Hub, GHCR, or another registry.
+- Base images may still be pulled unless the deployment overrides them with internal mirrored images.
 - Avoid GHCR for the demo unless prebuilt private images become necessary.
 - Use GHCR private images only as the initial optional private registry for prebuilt images.
 - Use strict image retention to stay within early quota.

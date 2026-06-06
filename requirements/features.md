@@ -3,6 +3,20 @@
 ## Overview And Monitoring
 - Show current consumption across the community portfolio.
 - Show current readings and historic readings per site, building, datapoint, category, and medium.
+- Allow users to open reusable time-series graphs from historic readings and summary metric cards.
+- Historic month entries should drill down to daily usage for the selected month.
+- Summary metric cards such as electricity, heat, water, and CO2 should drill down to the same graph component, focused on the last 12 months by default.
+- The time-series graph should be a separate authenticated screen/tab named "Verlauf" in German.
+- Clicking a metric card or historic row should navigate to the graph screen with the clicked object, medium, date/period, horizon, and mode preselected.
+- The graph screen must include a back button that returns to the previously active view.
+- Time-series graphs must support cumulative and period-based views where meaningful.
+- Time-series graphs must support clear time horizon labels for one day, one week, one month, one year, three years, and ten years.
+- Time-series graphs must allow selecting specific days, weeks, months, or years based on the current horizon/view.
+- Time-series graphs must include a focus date field where users can enter a specific date.
+- Date fields that represent "today" or the current working date should default to the user's browser date.
+- Users must not be able to select future dates in date fields.
+- Graph labels and table alternatives must include the year for week, month, and year views so period context is unambiguous.
+- The graph must not include a separate "Auswahl" dropdown if the same selection is already represented by click navigation, horizon controls, and focus date.
 - Support electricity, heat, water, CO2 equivalents, costs, and energy production.
 - Compare readings against:
   - last year;
@@ -23,6 +37,8 @@ Approved decision:
 - Data, readings, ratings, report download, and control-related flows may be mocked.
 - The UI should still look feature-complete and feel interactive from the clerk perspective.
 - Mocked behavior must sit behind proper interface/API-shaped adapters so it can later be replaced by the real backend without redesigning the frontend.
+- The demo should show the provided Harsefeld community logo in the application branding.
+- The first demo does not expose Admin personalization settings, but it should visually demonstrate the future branding capability through the fixed demo logo.
 - Required municipal object types for the first demo:
   - schools;
   - town halls / administrative offices;
@@ -35,6 +51,7 @@ Approved decision:
   - public pools.
 - Optional first-demo object types include street lighting, public buildings, community halls, and other municipal assets.
 - Actor-control screens may be shown in the first demo, but realistic command execution simulation is not required.
+- Actor controls should also be visible from the object detail screen, not only from a separate control screen.
 - First-demo actor controls may be UI-only or use simple mocked acknowledgements.
 - Detailed command history, control failure simulation, and live device feedback are not required for the first demo unless needed for visual completeness.
 - V1 only demonstrates actor-control intent in the UI and does not perform real device control.
@@ -46,11 +63,20 @@ Approved decision:
 - Configurable report templates are a future product direction, but admin/consultant-level template configuration may be excluded from the clerk-only demo unless needed to define proper interfaces.
 - Demo data should be Samtgemeinde Harsefeld-style mock data, fictionalized for 2026 so it does not imply real current values.
 - Demo DWD/weather integration should be included if practical. If real DWD fetching is too much for the first frontend-only demo, use an API-shaped mock with the same interface.
+- Historic month rows should be clickable and open a daily-usage graph for that month.
+- Historic readings should offer a toggle between "Kumuliert" and "Pro Monat" in German, and clear equivalent English labels.
+- Summary fields for electricity, heat, water, and CO2 should be clickable and open the same graph component with a last-12-month default focus.
+- Graph horizon controls should use clear German and English labels, not abbreviations.
+- The ratings/anomaly screen should show immediate text feedback after a review request is sent or updated.
+- The ratings/anomaly screen should show a protocol/log of requested consultant reviews and updates below the request form.
+- If a site/object already has an open consultant review request, the primary button should change from "Anfrage senden" to "Anfrage aktualisieren".
+- The demo should include mocked existing consultant-review request data in addition to Pumpwerk Aue-Sued, so the log and update behavior are visible.
 - The first demo screen set is:
   - mocked login;
   - portfolio overview;
   - site/building detail;
   - current and historic readings;
+  - time-series graph / "Verlauf";
   - ratings and anomaly request;
   - actor controls and schedules as mocked clerk workflows;
   - report request/download for an imaginary Harsefeld 2026 report;
@@ -76,7 +102,31 @@ Approved decision:
 - Open detail: simple predictions may be useful to report on trends and should be evaluated for the rating/reporting model.
 - Users must be able to mark readings as anomalous.
 - Marking an anomaly initially triggers an email or task to the energy consultant.
+- A site/object may have one open consultant review request at a time until the Energy Consultant closes it.
+- While a consultant review request is open, Community/Clerk users can add updates to the existing request rather than creating a parallel request.
+- Closed consultant review requests remain visible in the protocol/log, and a new request may be opened afterwards.
+- The UI must show immediate text feedback when a review request is sent or updated.
+- Review request protocol entries should show at least timestamp, site/object, message, status, and whether the entry opened a request or updated an existing request.
+- Review requests must support consultant response fields in the API model, including a short assessment for overview/status surfaces and a full assessment for drill-in detail.
+- Rating summary text has two layers:
+  - an automatically generated assessment such as "Alle Werte sind vollständig und liegen im grünen Bereich", "Strom deutlich erhöht", "Strom und Wasserverbrauch leicht erhöht", or "Wasserverbrauch für Mai und Juni unvollständig";
+  - a request/consultant subtext shown only after a request exists, such as request status while pending or the consultant's short assessment after response.
+- Clicking a request/consultant subtext should reveal the full consultant answer where one exists.
+- The ratings screen should expand the currently selected object and show its measurements for electricity, water, heat, and CO2 again.
+- On the ratings screen, the request log, text field, and action button should appear directly below the currently selected object and its measurements, not at the page bottom.
+- On object detail, non-green objects should show a dismissible warning at the top.
+- The object detail warning should show the automatic warning text, a request-in-progress status, or the consultant's short assessment depending on request state.
+- Clicking the object detail warning should navigate to the ratings screen with the relevant object selected and ready to send a request or review the consultant answer.
 - Later versions may route anomalies to AI analysis.
+
+## Branding And Personalization
+- Admin users must be able to configure community personalization options.
+- The minimum required personalization option is a community logo.
+- The community logo should be used in the authenticated WebUI, public portal, and generated/downloaded reports where appropriate.
+- The first customer-presentable frontend demo should use the provided Harsefeld logo PNG as a fixed demo asset and must not use an invented or hand-drawn replacement logo.
+- The provided logo asset should live in a normal frontend public/static asset location.
+- Unused generated logo assets should be removed from the demo frontend.
+- Admin branding configuration UI is out of scope for the first Community/Clerk-only demo, but the demo should make the resulting branded experience visible.
 
 ## Control And Automation
 - Support controlled actors including heating, cooling, lights, shades, blinds, and similar appliances.
@@ -85,11 +135,14 @@ Approved decision:
   - schools need reduced heating on weekends;
   - gyms may have low or no usage in mornings;
   - offices and libraries may follow opening hours.
+- Users should be able to edit all schedule/timetable fields exposed in the demo: name, days, time window, target label, and enabled status.
+- Schedule/timetable editing must use API-shaped interfaces that can map to the future backend.
 - Allow simple sensor-based automations:
   - heating based on temperature sensors;
   - blinds or shades based on sunlight;
   - lighting based on schedules or occupancy in later versions.
 - Control operations must be permissioned, validated, logged, and visible in history.
+- Pending actor command confirmations and schedule/timetable confirmations should automatically cancel when the selected object changes.
 
 ## Reporting
 - Generate annual energy reports similar to the Harsefeld 2023 report.
