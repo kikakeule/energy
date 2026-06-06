@@ -133,13 +133,16 @@ Approved decision:
 - Later versions may route anomalies to AI analysis.
 
 ## Filtering, Sorting, And Object Selection
-- Portfolio, ratings, and control views must provide shared filters because communities may manage many objects such as traffic lights, street lights, buildings, and technical sites.
+- Portfolio and ratings views must provide shared filters because communities may manage many objects such as traffic lights, street lights, buildings, and technical sites.
 - Required shared filters are village, object type, and rating.
-- Portfolio and ratings views must include an exception toggle that shows red/critical objects even when they do not match the current village or type filters.
-- The critical-object exception applies only to red ratings, not yellow or unrated objects.
-- The control view must include a filter to hide objects without controllable actors.
-- Shared filters should persist across navigation between portfolio, ratings, and control views.
+- Portfolio and ratings views must collapse filters behind a title-level "Filter" button.
+- When filters are active, the selected filter values should be summarized in smaller text below the "Filter" button.
+- Portfolio and ratings views must include an exception toggle labeled as critical-object behavior, not red-object behavior, that shows critical objects even when they do not match the current village or type filters.
+- The critical-object exception applies only to red/critical ratings, not yellow or unrated objects.
+- The control view should not show the shared filter panel in the first demo; it should use cascaded object selection only.
+- Portfolio/rating filter state should persist across navigation between portfolio and ratings views.
 - Sorting must include alphabetical, rating, type, village, and CO2 consumption.
+- Sorting direction must be combined into the sort option where direction is meaningful, such as alphabetical ascending/descending, village ascending/descending, and CO2 ascending/descending.
 - Alphabetical, village, and CO2 sorting must support ascending and descending order.
 - Type sorting groups objects by type label and sorts objects alphabetically inside each type.
 - Village sorting sorts villages alphabetically and then sorts objects alphabetically within each village.

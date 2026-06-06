@@ -81,19 +81,23 @@
 - Resolved: First-demo button contrast.
   - Decision: Dark green primary buttons must use globally defined high-contrast white or off-white text, including report buttons and rating request buttons.
 - Resolved: First-demo filtering, sorting, and navigation behavior.
-  - Decision: Portfolio, ratings, and control views share persistent filters.
+  - Decision: Portfolio and ratings views share persistent filters.
   - Decision: Required filters are village, object type, and rating.
-  - Decision: Portfolio and ratings include a toggle to show red/critical objects even when filters would hide them; this exception applies only to red objects.
-  - Decision: Control includes a filter to hide objects without controllable actors.
+  - Decision: Portfolio and ratings filters are hidden behind a title-level "Filter" button and summarize active selections below the button.
+  - Decision: Filter dropdowns should sit on one row where space allows, with compact checkbox options below them.
+  - Decision: Portfolio and ratings include a toggle to show critical objects even when filters would hide them; this exception applies only to red/critical objects.
+  - Decision: German UI wording uses "Kritische Objekte" instead of "Rote Objekte" for the critical-object exception.
+  - Decision: Control does not show the shared filter panel in the first demo and uses cascaded object selection only.
   - Decision: Sorting includes alphabetical, rating, type, village, and CO2 consumption.
+  - Decision: Direction is combined into sort options where direction applies.
   - Decision: Alphabetical, village, and CO2 sorting support ascending and descending order.
   - Decision: Type sorting groups objects by type and sorts objects alphabetically inside each type.
   - Decision: Village sorting sorts villages alphabetically and objects alphabetically inside each village.
   - Decision: Rating sorting always orders red, yellow, green.
   - Decision: CO2 sorting places objects without CO2 data at the bottom in both directions.
   - Decision: Object selectors outside ratings use cascaded village, type, and object dropdowns.
-  - Decision: On small screens the top menu can be minimized and auto-minimizes after page changes.
-  - Decision: On regular layouts users can hide/unhide menu text for the current session.
+  - Decision: On small screens the top menu uses an arrow control and auto-minimizes after page changes; the control label hides when menu text is hidden.
+  - Decision: On regular layouts users can hide/unhide menu text for the current session, and the toggle label follows the same visibility rule as the other menu labels.
   - Decision: Sidebar text-collapse state is current-session only.
   - Decision: Mobile graph value preview is requirements-only for now; no code TODO is required.
 

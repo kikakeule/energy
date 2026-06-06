@@ -90,10 +90,11 @@ The automation API must support:
 
 ## Object List And Filter API
 Portfolio, ratings, control, and object-selection endpoints must support:
-- Filtering by village, object type, and rating.
-- Returning red/critical objects for portfolio and ratings views when the critical-object exception is enabled, even when other filters would exclude them.
-- Filtering control lists to hide objects without controllable actors.
+- Filtering by village, object type, and rating where the consuming view exposes filter controls.
+- Returning critical objects for portfolio and ratings views when the critical-object exception is enabled, even when other filters would exclude them.
+- Returning actor availability metadata so control object selectors can focus users on controllable objects without requiring a separate control filter panel.
 - Sorting by alphabetical name, rating, object type, village, and CO2 consumption.
+- Combining sort key and direction in frontend-facing option metadata where direction is meaningful.
 - Ascending and descending sort directions for alphabetical, village, and CO2 sorting.
 - Type sorting groups objects by type label and sorts objects alphabetically inside each type.
 - Rating sort order of red, yellow, green, then unrated/grey unless a future requirement changes the unrated placement.

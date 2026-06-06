@@ -120,14 +120,18 @@ Full product frontend should eventually include:
 - The "Ziel" field should be a dropdown populated from the selected actor's allowed actions, or the common allowed actions when multiple same-type actors are selected.
 
 ## Navigation, Filters, And Sorting
-- On small screens where navigation moves to the top, the menu must include a minimize button.
+- On small screens where navigation moves to the top, the menu must include an arrow control to minimize or expand it; the label may be visible when the full menu text is visible and must hide when menu text is hidden.
 - The top menu should automatically minimize after changing to another page.
-- On regular desktop/tablet layouts, users should be able to hide or show menu text and keep an icon-only navigation rail for the current session.
-- Portfolio, ratings, and control views should share filters for village, object type, and rating.
-- Portfolio and ratings filters must include a "show critical objects even if not selected by filter" option that includes red objects only.
-- Control filters must include an option to hide objects without controllable actors.
-- Shared filters should persist while users navigate between portfolio, ratings, and control views.
+- On regular desktop/tablet layouts, users should be able to hide or show menu text and keep an icon-only navigation rail for the current session; the toggle label should follow the same visibility rule as the other menu labels.
+- Portfolio and ratings views should share filters for village, object type, and rating.
+- Portfolio and ratings filters should be hidden behind a title-level "Filter" button, with active selections summarized in smaller text below the button.
+- Filter dropdowns should fit on one row where space allows; compact checkbox options should sit below the dropdowns.
+- Portfolio and ratings filters must include a "show critical objects even if not selected by filter" option that includes red/critical objects only.
+- The German UI wording should use "Kritische Objekte" instead of "Rote Objekte" for this filter.
+- The control view should not show the shared filter panel in the first demo; it should use cascaded object selection only.
+- Portfolio/rating filter state should persist while users navigate between portfolio and ratings views.
 - Sorting options should include alphabetical, rating, type, village, and CO2 consumption.
+- Sorting direction should be combined into the sort dropdown option where direction applies, such as "Alphabetisch up/down", "Ort up/down", and "CO2 up/down".
 - Alphabetical, village, and CO2 sorting support ascending and descending order.
 - Type sorting groups objects by type label and sorts objects alphabetically inside each type.
 - Village sorting orders villages alphabetically and then orders objects alphabetically inside each village.
