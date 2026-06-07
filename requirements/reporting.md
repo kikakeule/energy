@@ -39,6 +39,8 @@ The Harsefeld report indicates these content areas should be supported:
 - Net floor area where available.
 - Cost analysis for electricity, heat, and water.
 - Total costs and cost trend.
+- Cost improvement or worsening compared with prior years.
+- Year-over-year comparison tables for consumption, costs, and CO2 where data exists.
 - Cost per resident where resident count is available.
 - Resident count is postponed until after the first frontend demo.
 - Consumption analysis for electricity, heat, and water.
@@ -46,8 +48,13 @@ The Harsefeld report indicates these content areas should be supported:
 - CO2 equivalents for electricity and heat.
 - Electricity production.
 - Self-consumption and feed-in.
+- Device-level energy metrics where relevant, such as heat-pump electricity use, produced heat, COP, PV production, battery charge/discharge, and ventilation electricity use.
+- Device inventory summaries for relevant municipal equipment, including heat pumps, PV systems, batteries, and ventilation systems.
+- Device warning and maintenance summaries where relevant for internal reports.
 - Category-level comparisons.
 - Building benchmark comparison using kWh/m2*a indicators.
+- Visibility of whether a benchmark came from construction-year/type defaults or a per-object override.
+- Normalized peer/category comparison, with incomplete-state notes when required metadata is missing.
 - Strom-Waerme-Diagramm style prioritization.
 - Notes about incomplete or non-comparable years.
 - Recommendations for further investigations and savings measures.

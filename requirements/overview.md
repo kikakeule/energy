@@ -19,6 +19,7 @@ The project must be usable from scratch through Docker Compose from the main rep
 - Compare consumption against prior years, estimates, benchmarks, and expected usage.
 - Rate readings and properties using a green/yellow/red traffic-light model.
 - Control energy-affecting actors such as heating, cooling, lighting, shades, and blinds.
+- Track energy-relevant devices such as heat pumps, PV systems, batteries, and ventilation systems, including measurements, warnings, maintenance, and available controls.
 - Configure simple automations and time schedules.
 - Generate annual energy reports similar to the Harsefeld 2023 report.
 - Support community branding such as a community logo in the UI and reports.
@@ -68,7 +69,7 @@ The initial role model is documented in `requirements/user-roles.md`:
 ## Initial Assumptions
 - German is the default UI language; English is also required.
 - REST is the preferred API style.
-- The v1 backend should already define stable concepts for readings, datapoints, actors, automations, reports, users, and roles.
+- The v1 backend should already define stable concepts for readings, datapoints, devices, actors, automations, reports, users, and roles.
 - Data import via CSV is required for historical readings.
 - API security for external data ingestion and actor control is a required open topic and must be resolved before production use.
 - Docker Compose must be the default from-scratch deployment path.

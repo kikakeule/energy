@@ -8,6 +8,7 @@ The product must ingest energy data from municipal sites and external providers,
 - REST API for controlled reading ingestion.
 - REST API for reading queries.
 - REST API for actor control.
+- REST API for device inventory, device telemetry, device maintenance state, and device warnings.
 - Future edge gateway for remote objects.
 - Building automation integrations.
 - Weather and climate data for normalization and forecasts.
@@ -34,6 +35,14 @@ Potential protocols and integration surfaces to research and validate:
 - OPC UA for industrial or utility infrastructure.
 - EEBus for energy-relevant appliances and smart energy communication.
 - Smart Meter Gateway / CLS channel for Germany-specific secure metering/control scenarios.
+
+## Device Integration Scope
+- Device integrations should support both smart devices and legacy devices.
+- Smart devices may provide telemetry, warnings, maintenance state, and controls through building automation, vendor APIs, gateways, or local protocols.
+- Legacy devices may only be represented by manual metadata, imported/manual measurements, and manually maintained maintenance records.
+- V1 device categories to model are heat pumps, PV systems, batteries, and ventilation systems.
+- Device controls are represented as actor-backed controls in V1 and should integrate with the same permission, confirmation, and audit concepts as actor control.
+- Device warnings and maintenance-due events should flow into the same warning/message infrastructure as sensor and consumption warnings.
 
 ## External Data Provider Candidates
 Potential external data sources to research and validate:

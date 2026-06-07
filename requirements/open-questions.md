@@ -100,6 +100,49 @@
   - Decision: On regular layouts users can hide/unhide menu text for the current session, and the toggle label follows the same visibility rule as the other menu labels.
   - Decision: Sidebar text-collapse state is current-session only.
   - Decision: Mobile graph value preview is requirements-only for now; no code TODO is required.
+- Resolved: First-demo cost, comparison, sensor, warning, and settings expansion.
+  - Decision: Consumption tiles show costs as a secondary line where cost data exists.
+  - Decision: Portfolio includes a separate total-cost metric after CO2.
+  - Decision: A user-facing consumption/cost emphasis toggle is available in the side menu and mirrored in settings.
+  - Decision: The demo includes authenticated tabs for Vergleich, Meldungen, Sensoren, and Einstellungen.
+  - Decision: Vergleich compares up to five selected years with measurements as rows and years as columns.
+  - Decision: Vergleich includes a plus column to add another year and a compact visual comparison.
+  - Decision: Benchmarks are configurable by type/category/construction-year metadata and can be overridden per object with a kWh/(m2*a) value.
+  - Decision: Category comparisons normalize building values at least by usable area and show incomplete states when metadata is missing.
+  - Decision: Sensoren uses the same cascaded object-selection pattern as Steuerung.
+  - Decision: Object detail includes sensor tiles and warning checkboxes on both sensor and consumption tiles.
+  - Decision: Einstellungen contains Web, Mail, and App delivery preferences per warning category.
+  - Decision: Meldungen shows Web warnings, consultant request status updates, and system notices.
+  - Decision: Web warning messages are hidden immediately when the warning is disabled on the object/datapoint or Web delivery is disabled for that warning category.
+  - Decision: Logged-in user identity moves to a top-right profile dropdown that also holds logout and the future Admin panel entry point.
+  - Decision: "Alle Objekte" is available in comparison, ratings, sensor, and control object-selection surfaces where the view can show an aggregate or filtered set.
+  - Decision: Sensor and control pages should avoid duplicated nested titles; nested content headings should name the selected object or filtered object set.
+  - Open detail: Exact benchmark source tables, normalization formulas, and warning threshold defaults remain to be defined.
+- Resolved: Device/equipment surface.
+  - Decision: Add a separate authenticated "Geräte" / "Devices" menu page.
+  - Decision: The device page uses the same cascaded object-selection pattern as Sensoren and Steuerung.
+  - Decision: Device selection supports one object or "Alle Objekte" where the screen can list the filtered device set.
+  - Decision: Object detail includes a "Geräte" section where devices exist.
+  - Decision: Devices are modeled separately from sensors and actors because they are physical equipment that may contain measurements, sensors, controls, warnings, and maintenance records.
+  - Decision: V1 device types are Wärmepumpe, PV-Anlage, Batterie, and Lüftungsanlage.
+  - Decision: Smart devices can expose telemetry, warnings, controls, and maintenance state.
+  - Decision: Legacy devices can be represented with manually tracked measurements, maintenance records, and no live controls.
+  - Decision: Device tiles show compact summary measurements, while additional operational measurements live in a device detail tab.
+  - Decision: Heat pump summary measurements are electricity consumed, produced heat, and COP; detail measurements include flow temperature, return temperature, and operating mode where available.
+  - Decision: PV summary measurements are production, feed-in, and self-consumption; detail measurements include current output where available.
+  - Decision: Battery summary measurements are state of charge and charge/discharge power; detail measurements include capacity and charge/discharge energy where available.
+  - Decision: Ventilation summary measurements are electricity consumed, operating state, and filter state; detail measurements include airflow and CO2/air-quality values where available.
+  - Decision: All device measurements in the detail tab can be displayed as line graphs, not the bar-graph style used in measurement and comparison views.
+  - Decision: Device controls are always actor-backed in V1.
+  - Decision: Device controls reuse actor-control permission, confirmation, timetable where applicable, logging, and safety semantics.
+  - Decision: Actor-backed controls for a device are shown on the "Geräte" page as well as on the "Steuerung" page.
+  - Decision: Device maintenance supports next-maintenance/due/overdue state and warning/message generation.
+  - Decision: Maintenance warnings use info when due within 60 days, yellow when due within 30 days, and red when overdue.
+  - Decision: Maintenance warnings stay active until maintenance is recorded as completed.
+  - Decision: Device warnings, including maintenance warnings, can be disabled per device.
+  - Decision: Settings include notification categories for device faults and device maintenance.
+  - Decision: Device fault and device maintenance notification channels stay shared per category.
+  - Decision: Device fault and device maintenance settings include a dropdown with device-type checkboxes for Wärmepumpe, PV-Anlage, Batterie, and Lüftungsanlage.
 
 ## Reporting
 - Resolved: First report template target.

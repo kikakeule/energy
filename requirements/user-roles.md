@@ -7,6 +7,7 @@ Permissions:
 - Set up community environment and organization structure.
 - Add, connect, and configure datapoints.
 - Define datapoint meaning, names, units, media, and site assignment.
+- Configure devices, device measurements, device warning thresholds, and maintenance rules.
 - Configure actors and control capabilities.
 - Configure automations and schedules.
 - Import historic readings from CSV.
@@ -22,17 +23,19 @@ Community users are clerks or public officials and may not be technically experi
 Permissions:
 - Check readings and ratings.
 - View current and historic usage.
+- View allowed devices, device measurements, device warnings, and maintenance status.
 - Execute allowed automations.
 - Adjust allowed timetables or schedules.
+- Complete or update device maintenance records where explicitly permitted.
 - Request reports.
 - Download released reports.
 - Mark readings as anomalous and request consultant review.
 - No direct datapoint creation or low-level system setup.
 
 Fine-grained clerk permissions are a v2 requirement:
-- Admins should be able to create clerk/community users whose access is limited to specific villages, sites, objects, actors, or action categories.
+- Admins should be able to create clerk/community users whose access is limited to specific villages, sites, objects, devices, actors, or action categories.
 - Example: a clerk may be allowed to read values for one gym and control only that gym.
-- Control permissions must distinguish at least direct actor commands, temporary overwrites, and timetable/schedule editing.
+- Control permissions must distinguish at least direct actor commands, actor-backed device controls, temporary overwrites, timetable/schedule editing, and maintenance editing.
 - The UI should hide unavailable actions, but the backend must enforce the permission scope.
 
 ## Community Admin
@@ -40,6 +43,7 @@ Community Admins are technically capable municipal users.
 
 Permissions:
 - Most Admin-like configuration except adding new datapoints.
+- Configure device metadata, warning thresholds, and maintenance rules where allowed by policy.
 - Rename datapoints and reorganize them.
 - Configure automations and schedules.
 - Import historic readings from CSV.
@@ -52,6 +56,7 @@ Energy Consultants provide expert review and report content.
 Permissions:
 - Set energy estimates for readings and datapoints.
 - Define benchmark or target values used for ratings.
+- Maintain benchmark overrides and device-related consultant assessments where relevant.
 - View consultant requests and anomalous readings.
 - Add findings and recommendations to requested reports.
 - Approve and release reports to become downloadable.
@@ -71,6 +76,7 @@ Permissions:
 ## Cross-Cutting Role Requirements
 - All privileged actions must be auditable.
 - Control actions must show actor, user, requested state, timestamp, result, and failure reason.
+- Device control and maintenance actions must show device, user, requested/completed action, timestamp, result, and failure reason where applicable.
 - Role boundaries must be enforced in the backend, not only in the frontend.
 - Fine-grained v2 clerk permission checks must be enforced in the backend, including object scope and action type.
 - UI navigation must hide unavailable actions but backend authorization remains mandatory.

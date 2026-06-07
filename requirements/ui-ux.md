@@ -35,9 +35,14 @@ First customer-presentable frontend demo should include:
 - Site/building detail.
 - Current and historic readings.
 - Time-series graph / "Verlauf".
+- Year comparison / "Vergleich".
 - Ratings and anomaly request.
+- Messages / "Meldungen".
+- Sensor overview / "Sensoren".
+- Device overview / "Geräte".
 - Actor controls and schedules as mocked clerk workflows.
 - Report request/download for an imaginary Harsefeld 2026 report.
+- User settings / "Einstellungen".
 - Public overview and public reports.
 - Object detail should include actor-control access for the selected object where actors exist.
 
@@ -89,6 +94,58 @@ Full product frontend should eventually include:
 - The same graph component should be reused for historic reading drilldowns and summary metric drilldowns.
 - Graphs must include table/text alternatives for accessibility.
 
+## Cost And Comparison Interaction
+- Consumption tiles should show both consumption and cost where cost data exists.
+- A separate "Gesamtkosten" metric tile should appear after CO2 in the portfolio metric row.
+- On desktop, the portfolio metric row should place "Gesamtkosten" as the fifth tile on the first row, to the right of CO2 where space allows.
+- Metric card grids should auto-fit available tiles and stretch them evenly, without reserving empty slots when a screen has fewer metrics.
+- A global display toggle should switch the primary emphasis between "Verbrauch" and "Kosten" in German, and "Consumption" and "Cost" in English.
+- The display toggle should be available near the top of the side menu and mirrored in the settings screen.
+- The side-menu display toggle should not need a visible "Primärwert" title when the two buttons already explain the control.
+- The "Vergleich" screen should compare up to five selected years.
+- Year comparison tables should use measurements as rows and selected years as columns.
+- The rightmost comparison table column should show a plus action for adding another year until five years are selected.
+- Clicking the plus action should open a compact year picker; already selected years must not be selectable again.
+- The "Vergleich" screen should include a compact visual comparison for the selected years.
+- The default year comparison should use the browser's current year and the two previous years.
+- The "Vergleich" menu icon should be distinct from "Messwerte", "Verlauf", and "Steuerung".
+
+## Benchmarks, Sensors, Messages, And Settings
+- Object detail should include a "Kennzahlen" section for benchmark comparisons.
+- Benchmark comparison should show the object's normalized value, the benchmark value, deviation, source, and whether an object-specific override was used.
+- Object detail should include a "Kategorievergleich" section for normalized peer/category comparison.
+- Category comparison should show incomplete-state messaging when required metadata is missing.
+- Object detail should include a "Sensoren" section in addition to "Akteure" where non-consumption sensors exist.
+- Object detail should include a "Geräte" section in addition to "Sensoren" and "Akteure" where devices exist.
+- Object detail and current-reading screens should hide measurements whose quality is missing/unavailable for the selected object.
+- The "Sensoren" screen should use cascaded object selection like "Steuerung".
+- The "Geräte" screen should use cascaded object selection like "Sensoren" and "Steuerung".
+- The "Sensoren", "Geräte", and "Steuerung" screens should not duplicate their page title as a nested section title; the page title should explain the screen and the nested content heading should be the selected object or object set.
+- The "Sensoren", "Geräte", and "Steuerung" page title should use a short descriptive subtitle instead of repeating the selected object's name.
+- The "Geräte" menu icon should be distinct from "Messwerte", "Verlauf", "Vergleich", "Sensoren", and "Steuerung".
+- Sensor tiles should show current value, unit, status, last update, and warning enabled state.
+- Sensor tiles and consumption tiles should expose warning checkboxes in the demo.
+- Device tiles should show device type, object/site, key measurements, operational status, warning state, next maintenance state, and available controls where applicable.
+- Device tiles should show only compact summary measurements by default; additional operational measurements should be available in a device detail tab.
+- Device detail tabs must allow all device measurements to be opened as line graphs, not as the bar charts used in "Messwerte" and "Vergleich".
+- Device maintenance state should be visible without opening a separate detail page when maintenance is due soon, due, or overdue.
+- Maintenance status should use info for due within 60 days, yellow for due within 30 days, and red for overdue.
+- Smart-device controls must be actor-backed and use the same confirmation and feedback patterns as actor controls.
+- Actor-backed controls for a device should be shown on the "Geräte" page as well as on the "Steuerung" page.
+- Legacy devices should still render clearly even when they only have manually tracked measurements and maintenance state.
+- Device warnings, including maintenance warnings, should include a per-device enable/disable control.
+- Disabling a sensor or consumption warning checkbox should immediately hide matching warning messages from "Meldungen" for the current session.
+- The "Meldungen" screen should show Web-channel warnings, consultant request status updates, and system notices.
+- The "Meldungen" screen should include a filter control similar to the ratings/portfolio filter pattern.
+- Message rows should include severity/status, object, timestamp, short text, source/channel, and a target action where useful.
+- The "Einstellungen" screen should include notification channel preferences per warning category.
+- Warning categories should include at least electricity consumption, water consumption, heat consumption, cost, air quality, water level, device faults, and device maintenance.
+- Each warning category should have Web, Mail, and App checkboxes.
+- Device fault and device maintenance rows should keep Web, Mail, and App shared for the category, with a compact dropdown of device-type checkboxes for Wärmepumpe, PV-Anlage, Batterie, and Lüftungsanlage.
+- If all channels are unchecked for a warning category, warnings in that category should be ignored for that user.
+- If Web is unchecked for a warning category, matching Web warning messages should no longer appear in "Meldungen".
+- App notification preferences may be stored before the mobile app exists, but the first demo should not show explanatory "future app" helper text inside each settings row.
+
 ## Rating And Review Request Feedback
 - The rating/anomaly request workflow must show immediate text feedback after a request is sent or updated.
 - If a site/object has no open consultant review request, the primary action label should be "Anfrage senden" in German.
@@ -123,6 +180,8 @@ Full product frontend should eventually include:
 - On small screens where navigation moves to the top, the menu must include an arrow control to minimize or expand it; the label may be visible when the full menu text is visible and must hide when menu text is hidden.
 - The top menu should automatically minimize after changing to another page.
 - On regular desktop/tablet layouts, users should be able to hide or show menu text and keep an icon-only navigation rail for the current session; the toggle label should follow the same visibility rule as the other menu labels.
+- Logged-in user information should live in a top-right profile dropdown rather than at the bottom of the side menu.
+- The profile dropdown should show the current user, role, organization, a logout action, and the future entry point for Admin users to access the admin panel.
 - Portfolio and ratings views should share filters for village, object type, and rating.
 - Portfolio and ratings filters should be hidden behind a title-level "Filter" button, with active selections summarized in smaller text below the button.
 - Filter dropdowns should fit on one row where space allows; compact checkbox options should sit below the dropdowns.
@@ -139,6 +198,8 @@ Full product frontend should eventually include:
 - CO2 sorting places objects without CO2 values at the bottom in both directions.
 - Object selectors outside ratings should use cascaded dropdowns: village, object type, then object.
 - Cascaded village and object type dropdowns default to "all"; object options are filtered and sorted alphabetically.
+- Comparison, ratings, sensor, device, and control object selection surfaces should include "Alle Objekte" where the selected view can show an aggregate or list for the filtered object set.
+- Object detail and current-reading screens are single-object screens; if the current selection is "Alle Objekte", navigation to those screens should reset to the first valid object in the current list.
 
 ## Design Requirements
 - Prioritize clarity and scanability for municipal users.

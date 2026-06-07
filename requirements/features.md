@@ -3,6 +3,10 @@
 ## Overview And Monitoring
 - Show current consumption across the community portfolio.
 - Show current readings and historic readings per site, building, datapoint, category, and medium.
+- Show energy costs as a first-class portfolio and object metric, including total cost and cost trend.
+- Every consumption tile should show the consumption value and a smaller cost line where cost data exists.
+- Object-specific current-reading surfaces should hide unavailable/missing media, so technical objects only show relevant measurements.
+- Users should be able to toggle whether consumption or cost is emphasized as the primary display value.
 - Allow users to open reusable time-series graphs from historic readings and summary metric cards.
 - Historic month entries should drill down to daily usage for the selected month.
 - Summary metric cards such as electricity, heat, water, and CO2 should drill down to the same graph component, focused on the last 12 months by default.
@@ -27,13 +31,47 @@
 - When "Alle Objekte" is selected, the measurement dropdown should offer aggregate media such as electricity, water, heat, and CO2 where those media exist in the filtered object set.
 - When a single object is selected, the measurement dropdown should offer only measurements available for that object.
 - Support electricity, heat, water, CO2 equivalents, costs, and energy production.
+- Provide a separate authenticated comparison screen/tab named "Vergleich" in German and "Compare" in English.
+- The comparison screen must support up to five selected years.
+- Year comparison tables should place years as columns and measurements as rows.
+- The rightmost comparison table column should allow adding another year with a plus action until the maximum number of years is reached.
+- Year comparison must include at least electricity, heat, water, CO2, and cost where available.
+- Year comparison should include a compact visual comparison in addition to the table.
 - Compare readings against:
   - last year;
   - multi-year history;
   - consultant-provided estimates;
   - benchmark/reference values;
   - expected usage.
+- Support configurable building benchmark/reference values by object type, category, construction year, usable area, source, and validity period.
+- Building metadata must allow an optional per-object kWh/(m2*a) benchmark override that Admins or Energy Consultants can maintain.
+- Compare objects against their own category or peer group, such as one fire department against other fire departments.
+- Category comparisons must normalize building values at least by usable area, and heat comparisons should use weather-normalized values where available.
+- If required normalization metadata is missing, category comparisons must show an incomplete/limited state rather than a confident ranking.
 - Provide portfolio-level, building-level, and datapoint-level views.
+- Support additional non-consumption sensor datapoints such as water level, air quality, temperature, humidity, or occupancy.
+- Sensor datapoints should support configurable warning thresholds where the datapoint is warning-capable.
+- Consumption tiles and sensor tiles should include warning enable controls in the demo.
+- Users must be able to configure warning delivery per warning category with Web, Mail, and App channels.
+- If all delivery channels are disabled for a warning category, warnings of that category are ignored for that user.
+- Provide a separate authenticated messages screen/tab named "Meldungen" in German and "Messages" in English.
+- The messages screen must show Web-channel warnings, consultant request updates, and system messages.
+- The messages screen must support filtering by at least village, object type, rating/severity, message category/type, and warning category where applicable.
+- Warning messages must immediately disappear from the messages screen when the relevant object/datapoint warning is disabled or when the user's Web delivery preference for that warning category is disabled.
+- Provide a separate authenticated sensor screen/tab named "Sensoren" in German and "Sensors" in English.
+- The sensor screen should use the same cascaded object selection pattern as the control screen.
+- Provide a separate authenticated device screen/tab named "Geräte" in German and "Devices" in English.
+- The device screen should use the same cascaded object selection pattern as the control and sensor screens.
+- Devices belong to objects/sites and can have their own measurements, warning states, maintenance state, and controls.
+- Device views must support selecting one object or "Alle Objekte" where the screen can show the matching filtered device set.
+- V1 should support at least these device types: Wärmepumpe, PV-Anlage, Batterie, and Lüftungsanlage.
+- Devices may be smart devices with live telemetry/control capabilities or legacy devices with manually tracked measurements and maintenance only.
+- Device measurements can differ per device type, such as electricity consumed, heat produced, and COP for heat pumps.
+- Device tiles should expose only the compact summary measurements by default, while additional operational measurements live in a device detail view.
+- Device detail views must allow all device measurements to be displayed as line graphs rather than the bar-graph style used for measurement and comparison screens.
+- Devices can raise separate warnings, independent from building consumption and general sensor warnings.
+- Devices must support maintenance tracking, including next maintenance due dates and maintenance-due or overdue warnings.
+- Provide a separate authenticated settings screen/tab named "Einstellungen" in German and "Settings" in English for user-facing display and notification preferences.
 - Support objects that only need reporting, such as traffic lights or pumping stations.
 - Support objects that need monitoring and control, such as schools, libraries, gyms, and town halls.
 
@@ -87,9 +125,14 @@ Approved decision:
   - site/building detail;
   - current and historic readings;
   - time-series graph / "Verlauf";
+  - year comparison / "Vergleich";
   - ratings and anomaly request;
+  - messages / "Meldungen";
+  - sensor overview / "Sensoren";
+  - device overview / "Geräte";
   - actor controls and schedules as mocked clerk workflows;
   - report request/download for an imaginary Harsefeld 2026 report;
+  - settings / "Einstellungen";
   - public overview and public reports.
 
 ## Ratings And Anomalies
@@ -140,6 +183,9 @@ Approved decision:
 - Portfolio and ratings views must include an exception toggle labeled as critical-object behavior, not red-object behavior, that shows critical objects even when they do not match the current village or type filters.
 - The critical-object exception applies only to red/critical ratings, not yellow or unrated objects.
 - The control view should not show the shared filter panel in the first demo; it should use cascaded object selection only.
+- The comparison, ratings, sensor, device, and control object selectors should include an "Alle Objekte" option where the view can meaningfully show an aggregate or all matching objects.
+- If "Alle Objekte" is selected in the control, sensor, or device view, the view should show the selected filtered object set rather than requiring the user to scroll through every object manually.
+- Single-object screens such as object detail and current readings must reset an aggregate "Alle Objekte" selection to the first valid object before rendering.
 - Portfolio/rating filter state should persist across navigation between portfolio and ratings views.
 - Sorting must include alphabetical, rating, type, village, and CO2 consumption.
 - Sorting direction must be combined into the sort option where direction is meaningful, such as alphabetical ascending/descending, village ascending/descending, and CO2 ascending/descending.
@@ -184,6 +230,35 @@ Approved decision:
   - lighting based on schedules or occupancy in later versions.
 - Control operations must be permissioned, validated, logged, and visible in history.
 - Pending actor command confirmations and schedule/timetable confirmations should automatically cancel when the selected object changes.
+
+## Devices, Maintenance, And Equipment
+- Object detail screens must include a "Geräte" section where devices exist for the selected object.
+- Devices must be distinct from sensors and actors:
+  - sensors measure values;
+  - actors expose controllable actions;
+  - devices are physical equipment that can contain measurements, sensors, actor controls, warnings, and maintenance records.
+- Device records should include at least object/site assignment, device type, display name, smart/legacy capability, operational status, and available measurements.
+- Smart devices may expose controls such as enabling/disabling a heat pump or changing an operating mode.
+- Device controls must always be backed by actor actions in V1, so permissions, confirmations, timetables where applicable, command history, and audit logs remain consistent.
+- Actor-backed controls for a device must be visible on the "Geräte" page as well as on the "Steuerung" page.
+- Legacy devices may have only manual measurements, manual maintenance records, and manually entered status notes.
+- V1 supported device types are:
+  - Wärmepumpe;
+  - PV-Anlage;
+  - Batterie;
+  - Lüftungsanlage.
+- Heat pump device summary measurements are electricity consumed, heat produced, and COP; detail measurements should additionally support flow temperature, return temperature, and operating mode where available.
+- PV device summary measurements are produced electricity, feed-in, and self-consumption; detail measurements should additionally support current output where available.
+- Battery device summary measurements are state of charge and charge/discharge power; detail measurements should additionally support capacity and charge/discharge energy where available.
+- Ventilation device summary measurements are electricity consumed, operating state, and filter state; detail measurements should additionally support airflow and CO2/air-quality values where available.
+- Device tiles should show current status, key measurements, warning state, and next maintenance state.
+- Device maintenance must support a next-maintenance date or interval, a manual "maintenance completed" record, and staged due/overdue warnings.
+- Maintenance warning severity is info when due within 60 days, yellow when due within 30 days, and red when overdue.
+- Maintenance warnings remain active until maintenance is recorded as completed.
+- Device warnings, including maintenance warnings, can be disabled per device.
+- Device warnings must appear in "Meldungen" when the user's Web notification preference includes the relevant warning category.
+- Settings must include notification categories for device faults and device maintenance.
+- Device fault and device maintenance notification channels are shared per category, with an additional dropdown of device-type checkboxes to include or exclude Wärmepumpe, PV-Anlage, Batterie, and Lüftungsanlage for that category.
 
 ## Reporting
 - Generate annual energy reports similar to the Harsefeld 2023 report.
